@@ -24,7 +24,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_easyloading: ^3.0.5
-
+  sqflite: ^2.2.0+3
+  path_provider: any
 
 
 
@@ -49,6 +50,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/db/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
