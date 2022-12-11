@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:vetcription/Pages/Dashboard.dart';
+
+import '../Model/UserModel.dart';
 
 class SignUpForDoctor extends StatefulWidget {
   const SignUpForDoctor({Key key}) : super(key: key);
@@ -186,10 +191,29 @@ class _SignUpForDoctorState extends State<SignUpForDoctor> {
                   height: 10,
                 ),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if(_formKey.currentState.validate()){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard(userMode: "Doctor",)));
-
+                      try {
+                        UserModel user=UserModel();
+                        user.email=_emailController.text.trim();
+                        user.password=_passWordController.text.trim();
+                        user.regiNumber="";
+                        user.name=_nameController.text.trim();
+                        user.phone=_mobileController.text.trim();
+                        user.userType="Doctor";
+                        await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailController.text.trim(), password: _passWordController.text.trim()).then((value){
+                          if(value.user.email==_emailController.text.trim()){
+                            FirebaseFirestore.instance.collection('userData').doc(value.user.uid).set(user.toJson());
+                            Navigator.pop(context);
+                          }
+                          else{
+                            toast("User Already Exist");
+                          }
+                        });
+                      } on Exception catch (e) {
+                        toast(e.toString());
+                        // TODO
+                      }
                     }
                   },
                   child: Text("Sign Up"),

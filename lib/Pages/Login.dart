@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -13,7 +14,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController _numberController=TextEditingController();
+  TextEditingController _emailController=TextEditingController();
   TextEditingController _passwordController=TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class _LoginState extends State<Login> {
                 height: 100,
               ),
               TextFormField(
-                controller: _numberController,
+                controller: _emailController,
                   decoration: InputDecoration(
                 labelText: "Phone Number",
                 hintText: "Enter your Phone Number",
@@ -58,7 +59,10 @@ class _LoginState extends State<Login> {
                 height: 10,
               ),
               ElevatedButton(
-                onPressed: () {
+                onPressed: ()
+                {
+                  _signIn();
+                  /*
                   if(_passwordController.text=="1"){
                     toast("Dcotor Mode");
                     Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard(userMode: "Doctor",)));
@@ -67,7 +71,7 @@ class _LoginState extends State<Login> {
                     toast("User Mode");
                     Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard(userMode: "User",)));
 
-                  }
+                  }*/
 
                 },
                 child: Text("Login"),
@@ -99,5 +103,19 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  Future _signIn() async {
+    /*showDialog(
+      context:context,
+      builder:(context)=>Center(child:CircularProgressIndicator()));*/
+
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailController.text.trim(), password: _passwordController.text.trim());
+    } on Exception catch (e) {
+      // TODO
+    }
+   // navigatorKey.currentState.popUntil((route) => route.isCurrent);
+
   }
 }

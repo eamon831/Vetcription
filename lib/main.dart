@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:vetcription/Utils/Colors.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'Pages/AppSplashScreen.dart';
 import 'Utils/Colors.dart';
 
 
 
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
-  configLoading();
+  //configLoading();
 }
 
 void configLoading() {
@@ -31,13 +35,15 @@ void configLoading() {
     ..animationStyle = EasyLoadingAnimationStyle.offset
     ..maskType = EasyLoadingMaskType.black;
 }
-
+final navigatorKey=GlobalKey<NavigatorState>();
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
      setStatusBarColor(Colors.blue);
     return MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'Vetcription',
       builder: EasyLoading.init(),

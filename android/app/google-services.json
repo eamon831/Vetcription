@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "437135914685",
+    "project_id": "uuvetcription-dee32",
+    "storage_bucket": "uuvetcription-dee32.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:437135914685:android:d365d0a8bd647de9b3e9d4",
+        "android_client_info": {
+          "package_name": "com.vetcription_flutter.com.vetcription"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "437135914685-f9lp1kjbr73e4m805gj167kmav7s1rqr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCv9bWZ3Rh2k7boYcfCneXjsP42yguHR1U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "437135914685-f9lp1kjbr73e4m805gj167kmav7s1rqr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -189,6 +190,77 @@ class _DashboardState extends State<Dashboard> {
                             ),
                           ),
                         ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Visibility(
+                        visible: widget.userMode=="User",
+                        child: Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>NearByDoctor()));
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width / 2,
+                              height: MediaQuery.of(context).size.height / 5,
+                              // color: Colors.red,
+                              decoration: BoxDecoration(
+                                  border: Border.all(width: 5),
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Colors.blueGrey),
+
+                              child: Column(
+                                children: [
+                                  Icon(Icons.person, size: 100),
+                                  Text(
+                                    "Nearby Doctor's",
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.white),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: true,
+                        child: Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              FirebaseAuth.instance.signOut();
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width / 2,
+                              height: MediaQuery.of(context).size.height / 5,
+                              // color: Colors.red,
+                              decoration: BoxDecoration(
+                                  border: Border.all(width: 5),
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Colors.blueGrey),
+
+                              child: Column(
+                                children: [
+                                  Icon(Icons.person, size: 100),
+                                  Text(
+                                    "Log Out",
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.white),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                        width: 10,
                       ),
                     ],
                   ),
