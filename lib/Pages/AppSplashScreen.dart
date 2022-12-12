@@ -65,38 +65,37 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
             final uid = user.uid; // 👈 get the UID
             if (user != null) {
               print(user);
-            
+
               CollectionReference users =
                   FirebaseFirestore.instance.collection('userData');
-            
+
               return FutureBuilder<DocumentSnapshot>(
                 future: users.doc(uid).get(),
                 builder: (BuildContext context,
                     AsyncSnapshot<DocumentSnapshot> snapshot) {
                   if (snapshot.hasError) {
-
                     return Text("Something went wrong");
                   }
-            
+
                   if (snapshot.hasData && !snapshot.data.exists) {
                     return Text("Document does not exist");
                   }
-            
+
                   if (snapshot.connectionState == ConnectionState.done) {
                     Map<String, dynamic> data =
                         snapshot.data.data() as Map<String, dynamic>;
-                    UserModel user=UserModel.fromJson(data);
+                    UserModel user = UserModel.fromJson(data);
                     print(user.toJson().toString());
-                    return Dashboard(userMode: user.userType);
+                    return Dashboard(userModel: user, userMode: user.userType);
                   }
-            
+
                   return Text("loading");
                 },
               );
             } else {
               return Text("user is not logged in");
             }
-          }else{
+          } else {
             return Login();
           }
         },

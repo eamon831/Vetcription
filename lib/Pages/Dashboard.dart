@@ -8,10 +8,13 @@ import 'package:vetcription/Pages/NearByPatient.dart';
 import 'package:vetcription/Pages/SavedMedicine.dart';
 import 'package:vetcription/Pages/SearchMedicine.dart';
 
+import '../Model/UserModel.dart';
+
 class Dashboard extends StatefulWidget {
   String userMode;
+  UserModel userModel;
 
-  Dashboard({Key key, this.userMode}) : super(key: key);
+  Dashboard({Key key, this.userMode,this.userModel}) : super(key: key);
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -135,7 +138,7 @@ class _DashboardState extends State<Dashboard> {
                         child: Expanded(
                           child: InkWell(
                             onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>NearByPatient()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>NearByPatient(userModel: widget.userModel,)));
                             },
                             child: Container(
                               width: MediaQuery.of(context).size.width / 2,
@@ -199,11 +202,11 @@ class _DashboardState extends State<Dashboard> {
                   child: Row(
                     children: [
                       Visibility(
-                        visible: widget.userMode=="User",
+                        visible: false,
                         child: Expanded(
                           child: InkWell(
                             onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>NearByDoctor()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>NearByDoctor(userModel: widget.userModel,)));
                             },
                             child: Container(
                               width: MediaQuery.of(context).size.width / 2,
