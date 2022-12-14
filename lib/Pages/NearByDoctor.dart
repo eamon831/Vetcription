@@ -7,13 +7,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
+import 'package:nb_utils/nb_utils.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../Model/UserModel.dart';
+import 'MyMap.dart';
 
 class NearByDoctor extends StatefulWidget {
   UserModel userModel;
-  NearByDoctor({Key key,this.userModel}) : super(key: key);
+
+  NearByDoctor({Key key, this.userModel}) : super(key: key);
 
   @override
   State<NearByDoctor> createState() => _NearByDoctorState();
@@ -22,6 +25,7 @@ class NearByDoctor extends StatefulWidget {
 class _NearByDoctorState extends State<NearByDoctor> {
   final loc.Location location = loc.Location();
   StreamSubscription<loc.LocationData> _locationSubscription;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -62,89 +66,58 @@ class _NearByDoctorState extends State<NearByDoctor> {
             ],
           ),
           Expanded(
-              child: StreamBuilder(
-                stream:
-                FirebaseFirestore.instance.collection('Doctors').snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                  return ListView.builder(
-                      itemCount: snapshot.data?.docs.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title:
-                          Text(snapshot.data.docs[index]['name'].toString()),
-                          subtitle: Row(
-                            children: [
-                              Text(snapshot.data.docs[index]['latitude']
-                                  .toString()),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Text(snapshot.data.docs[index]['longitude']
-                                  .toString()),
-                            ],
-                          ),
-                          trailing: IconButton(
-                            icon: Icon(Icons.directions),
-                            onPressed: () {
-                              /*Navigator.of(context).push(MaterialPageRoute(
+            child: StreamBuilder(
+              stream:
+                  FirebaseFirestore.instance.collection('Doctors').snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                return ListView.builder(
+                    itemCount: snapshot.data?.docs.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(snapshot.data.docs[index]['name'].toString()),
+
+                        subtitle: Row(
+                          children: [
+                            Text(snapshot.data.docs[index]['latitude']
+                                .toString()),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Text(snapshot.data.docs[index]['longitude']
+                                .toString()),
+                          ],
+                        ),
+                        trailing: IconButton(
+                          icon: Icon(Icons.directions),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) =>
-                                      MyMap(snapshot.data.docs[index].id)));*/
-                            },
-                          ),
-                        );
-                      });
-                },
-              ),),
-
-/*
-          Expanded(
-            child: ListView.separated(
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Container(
-                      decoration: BoxDecoration(color: Colors.transparent),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 100,
-                              width: 100,
-                              child: Image.asset('assets/images/doctor_img.jpg',fit: BoxFit.fill),
-
-                          ),
-                           SizedBox(
-                             width: 5,
-                           ),
-                          Column(
-                            children: [
-                              Text("Name       :"),
-                              Text("Role          :"),
-                              Text("Address   :"),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                },
-                separatorBuilder: (context, index) => Divider(),
-                itemCount: 100),
+                                      MyMap(snapshot.data.docs[index].id)));
+                          },
+                        ),
+                      );
+                    });
+              },
+            ),
           ),
-*/
+
         ],
       ),
     );
   }
 
   _getLocation() async {
+    toast("ususu");
+
     try {
       final loc.LocationData _locationResult = await location.getLocation();
-      await FirebaseFirestore.instance.collection('Patient').doc(FirebaseAuth.instance.currentUser.uid).set({
+      await FirebaseFirestore.instance
+          .collection('Patient')
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .set({
         'latitude': _locationResult.latitude,
         'longitude': _locationResult.longitude,
         'name': widget.userModel.name,
@@ -162,7 +135,7 @@ class _NearByDoctorState extends State<NearByDoctor> {
         _locationSubscription = null;
       });
     }).listen((loc.LocationData currentlocation) async {
-      await FirebaseFirestore.instance.collection('Patient').doc('user1').set({
+      await FirebaseFirestore.instance.collection('Patient').doc(FirebaseAuth.instance.currentUser.uid).set({
         'latitude': currentlocation.latitude,
         'longitude': currentlocation.longitude,
         'name': widget.userModel.name,

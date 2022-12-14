@@ -18,7 +18,7 @@ class _MyMapState extends State<MyMap> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('location').snapshots(),
+          stream: FirebaseFirestore.instance.collection('Patient').snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (_added) {
               mymap(snapshot);

@@ -22,6 +22,14 @@ class _NearByPatientState extends State<NearByPatient> {
   final loc.Location location = loc.Location();
   StreamSubscription<loc.LocationData> _locationSubscription;
   @override
+  void initState() {
+    // TODO: implement initState
+    _requestPermission();
+    location.changeSettings(interval: 300, accuracy: loc.LocationAccuracy.high);
+    location.enableBackgroundMode(enable: true);
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -151,10 +159,10 @@ class _NearByPatientState extends State<NearByPatient> {
         _locationSubscription = null;
       });
     }).listen((loc.LocationData currentlocation) async {
-      await FirebaseFirestore.instance.collection('Patient').doc(FirebaseAuth.instance.currentUser.uid).set({
+      await FirebaseFirestore.instance.collection('Doctors').doc(FirebaseAuth.instance.currentUser.uid).set({
         'latitude': currentlocation.latitude,
         'longitude': currentlocation.longitude,
-        'name': 'john'
+        'name': widget.userModel.name,
       }, SetOptions(merge: true));
     });
   }

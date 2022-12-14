@@ -108,7 +108,8 @@ class _DashboardState extends State<Dashboard> {
                         child: Expanded(
                           child: InkWell(
                             onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>NearByDoctor()));
+                              toast(widget.userMode);
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>NearByDoctor(userModel: widget.userModel,)));
                             },
                             child: Container(
                               width: MediaQuery.of(context).size.width / 2,
