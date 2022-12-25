@@ -24,10 +24,11 @@ class _SearchMedicineState extends State<SearchMedicine> {
   }
   Future<void> _getMedicines() async {
     //toast("hello");
+    _medicineList.clear();
     await databaseHelper.getAll('vet_data').then((value) {
         value.forEach((element) {
           setState(() {
-            print(element);
+           // print(element);
             _medicineList.add(Medicine.fromJson(element));
           });
         });
@@ -35,22 +36,15 @@ class _SearchMedicineState extends State<SearchMedicine> {
 
 
   }
-  void filterSearchResults(String query) {
-    List<Medicine> dummySearchList = _medicineList;
-    _medicineList.clear();
+  Future<void> filterSearchResults(String query) async {
 
     if(query.isNotEmpty) {
-      List<Medicine> dummyListData = [];
-      dummySearchList.forEach((item) {
-        if(item.genericName.toLowerCase().contains(query)||item.tradeName.toLowerCase().contains(query)) {
-          dummyListData.add(item);
-        }
-      });
+      var data=await databaseHelper.medicineSearch(query);
+      //toast(data.length.toString());
       setState(() {
-        _medicineList.clear();
-        _medicineList.addAll(dummyListData);
+        _medicineList=data;
       });
-      return;
+
     } else {
       _getMedicines();
     }
@@ -67,7 +61,7 @@ class _SearchMedicineState extends State<SearchMedicine> {
           elevation: 0.00,
          actions: [
 
-           InkWell(
+         /*  InkWell(
              onTap: (){
                toast("Search Will Be Implemented");
              },
@@ -77,7 +71,7 @@ class _SearchMedicineState extends State<SearchMedicine> {
              ),
            ),
            Padding(padding: EdgeInsets.only(right: 5),
-           )
+           )*/
          ],
         ),
         body: Column(
@@ -297,6 +291,21 @@ class _SearchMedicineState extends State<SearchMedicine> {
                               Container(
                                 child: Expanded(child: Text(_medicineList[index].details!=null?_medicineList[index].details:'None')),
                               ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5, left: 5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              InkWell(
+                                child: ElevatedButton.icon(onPressed: () async {
+                                  databaseHelper.insert(_medicineList[index].toJson(), 'saved_data');
+                                  toast("Medicine Saved");
+                                }, icon: Icon(Icons.add), label: Text("Save")),
+                              )
                             ],
                           ),
                         ),

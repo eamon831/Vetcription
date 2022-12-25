@@ -9,6 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
 import 'package:nb_utils/nb_utils.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../Model/UserModel.dart';
 import 'MyMap.dart';
@@ -30,8 +31,7 @@ class _NearByDoctorState extends State<NearByDoctor> {
   void initState() {
     // TODO: implement initState
     _requestPermission();
-    location.changeSettings(interval: 300, accuracy: loc.LocationAccuracy.high);
-    location.enableBackgroundMode(enable: true);
+
     super.initState();
   }
 
@@ -40,12 +40,13 @@ class _NearByDoctorState extends State<NearByDoctor> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("Doctos's"),
+        title: Text("Doctor's"),
         bottomOpacity: 0.00,
         elevation: 0.00,
       ),
       body: Column(
         children: [
+/*
           Row(
             children: [
               TextButton(
@@ -65,6 +66,7 @@ class _NearByDoctorState extends State<NearByDoctor> {
                   child: Text('stop live location')),
             ],
           ),
+*/
           Expanded(
             child: StreamBuilder(
               stream:
@@ -76,27 +78,43 @@ class _NearByDoctorState extends State<NearByDoctor> {
                 return ListView.builder(
                     itemCount: snapshot.data?.docs.length,
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(snapshot.data.docs[index]['name'].toString()),
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: Container(
+                          color: Colors.amber[100],
+                          child: ListTile(
+                            title: Text(snapshot.data.docs[index]['name'].toString()),
 
-                        subtitle: Row(
-                          children: [
-                            Text(snapshot.data.docs[index]['latitude']
-                                .toString()),
-                            SizedBox(
-                              width: 20,
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                5.height,
+                                Row(
+                                  children: [
+                                    Text("latitude "+snapshot.data.docs[index]['latitude']
+                                        .toString()),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text("longitude "+snapshot.data.docs[index]['longitude'].toString()),
+                                  ],
+                                ),
+                                5.height,
+                                Text("phone "+snapshot.data.docs[index]['phone'].toString()),
+
+                              ],
                             ),
-                            Text(snapshot.data.docs[index]['longitude']
-                                .toString()),
-                          ],
-                        ),
-                        trailing: IconButton(
-                          icon: Icon(Icons.directions),
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) =>
-                                      MyMap(snapshot.data.docs[index].id)));
-                          },
+                            trailing: IconButton(
+                              icon: Icon(Icons.directions),
+                              onPressed: () async {
+                                final loc.LocationData _locationResult = await location.getLocation();
+                                launchMapsUrl(_locationResult.latitude, _locationResult.longitude, snapshot.data.docs[index]['latitude']
+                                    .toString(), snapshot.data.docs[index]['longitude']
+                                    .toString());
+                              },
+                            ),
+                          ),
                         ),
                       );
                     });
@@ -139,6 +157,8 @@ class _NearByDoctorState extends State<NearByDoctor> {
         'latitude': currentlocation.latitude,
         'longitude': currentlocation.longitude,
         'name': widget.userModel.name,
+        'phone':widget.userModel.phone,
+
       }, SetOptions(merge: true));
     });
   }
@@ -153,6 +173,9 @@ class _NearByDoctorState extends State<NearByDoctor> {
   _requestPermission() async {
     var status = await Permission.location.request();
     if (status.isGranted) {
+      location.changeSettings(interval: 300, accuracy: loc.LocationAccuracy.high);
+      location.enableBackgroundMode(enable: true);
+      _listenLocation();
       print('done');
     } else if (status.isDenied) {
       _requestPermission();
@@ -160,4 +183,21 @@ class _NearByDoctorState extends State<NearByDoctor> {
       openAppSettings();
     }
   }
+  static void launchMapsUrl(
+      sourceLatitude,
+      sourceLongitude,
+      destinationLatitude,
+      destinationLongitude) async {
+    String mapOptions = [
+      'saddr=$sourceLatitude,$sourceLongitude',
+      'daddr=$destinationLatitude,$destinationLongitude',
+      'dir_action=navigate'
+    ].join('&');
+
+    final url = 'https://www.google.com/maps?$mapOptions';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }  }
 }

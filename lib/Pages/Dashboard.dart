@@ -31,85 +31,148 @@ class _DashboardState extends State<Dashboard> {
               bottomOpacity: 0.00,
               elevation: 0.00,
             ),
-            body: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => SearchMedicine()));
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => SearchMedicine()));
 
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width / 2,
-                            height: MediaQuery.of(context).size.height / 5,
-                            // color: Colors.red,
-                            decoration: BoxDecoration(
-                                border: Border.all(width: 5),
-                                borderRadius: BorderRadius.circular(5),
-                                color: Colors.blueGrey),
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width / 2,
+                              height: MediaQuery.of(context).size.height / 5,
+                              // color: Colors.red,
+                              decoration: BoxDecoration(
+                                  border: Border.all(width: 5),
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Colors.blueGrey),
 
-                            child: Column(
-                              children: [
-                                Icon(Icons.medical_services_rounded, size: 100),
-                                Text(
-                                  "Search Medicine",
-                                  style: TextStyle(
-                                      fontSize: 20, color: Colors.white),
-                                )
-                              ],
+                              child: Column(
+                                children: [
+                                  Icon(Icons.medical_services_rounded, size: 100),
+                                  Text(
+                                    "Search Medicine",
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.white),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>DiseaseSearch()));
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width / 2,
-                            height: MediaQuery.of(context).size.height / 5,
-                            // color: Colors.red,
-                            decoration: BoxDecoration(
-                                border: Border.all(width: 5),
-                                borderRadius: BorderRadius.circular(5),
-                                color: Colors.blueGrey),
+                        SizedBox(
+                          height: 10,
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>DiseaseSearch()));
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width / 2,
+                              height: MediaQuery.of(context).size.height / 5,
+                              // color: Colors.red,
+                              decoration: BoxDecoration(
+                                  border: Border.all(width: 5),
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Colors.blueGrey),
 
-                            child: Column(
-                              children: [
-                                Icon(Icons.healing_outlined, size: 100),
-                                Text(
-                                  "Disease",
-                                  style: TextStyle(
-                                      fontSize: 20, color: Colors.white),
-                                )
-                              ],
+                              child: Column(
+                                children: [
+                                  Icon(Icons.healing_outlined, size: 100),
+                                  Text(
+                                    "Disease",
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.white),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Visibility(
-                        visible: widget.userMode=="User",
-                        child: Expanded(
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Visibility(
+                          visible: widget.userMode=="User",
+                          child: Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                //toast(widget.userMode);
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>NearByDoctor(userModel: widget.userModel,)));
+                              },
+                              child: Container(
+                                width: MediaQuery.of(context).size.width / 2,
+                                height: MediaQuery.of(context).size.height / 5,
+                                // color: Colors.red,
+                                decoration: BoxDecoration(
+                                    border: Border.all(width: 5),
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Colors.blueGrey),
+
+                                child: Column(
+                                  children: [
+                                    Icon(Icons.person, size: 100),
+                                    Text(
+                                      "Nearby Doctor's",
+                                      style: TextStyle(
+                                          fontSize: 20, color: Colors.white),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Visibility(
+                          visible: widget.userMode=="Doctor",
+                          child: Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>NearByPatient(userModel: widget.userModel,)));
+                              },
+                              child: Container(
+                                width: MediaQuery.of(context).size.width / 2,
+                                height: MediaQuery.of(context).size.height / 5,
+                                // color: Colors.red,
+                                decoration: BoxDecoration(
+                                    border: Border.all(width: 5),
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Colors.blueGrey),
+
+                                child: Column(
+                                  children: [
+                                    Icon(Icons.person, size: 100),
+                                    Text(
+                                      "Nearby Patient's",
+                                      style: TextStyle(
+                                          fontSize: 20, color: Colors.white),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                          width: 10,
+                        ),
+                        Expanded(
                           child: InkWell(
                             onTap: () {
-                              toast(widget.userMode);
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>NearByDoctor(userModel: widget.userModel,)));
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>SavedMedicine()));
                             },
                             child: Container(
                               width: MediaQuery.of(context).size.width / 2,
@@ -122,9 +185,9 @@ class _DashboardState extends State<Dashboard> {
 
                               child: Column(
                                 children: [
-                                  Icon(Icons.person, size: 100),
+                                  Icon(Icons.access_time_filled, size: 100),
                                   Text(
-                                    "Nearby Doctor's",
+                                    "Saved Medicine",
                                     style: TextStyle(
                                         fontSize: 20, color: Colors.white),
                                   )
@@ -133,144 +196,47 @@ class _DashboardState extends State<Dashboard> {
                             ),
                           ),
                         ),
-                      ),
-                      Visibility(
-                        visible: widget.userMode=="Doctor",
-                        child: Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>NearByPatient(userModel: widget.userModel,)));
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width / 2,
-                              height: MediaQuery.of(context).size.height / 5,
-                              // color: Colors.red,
-                              decoration: BoxDecoration(
-                                  border: Border.all(width: 5),
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.blueGrey),
-
-                              child: Column(
-                                children: [
-                                  Icon(Icons.person, size: 100),
-                                  Text(
-                                    "Nearby Patient's",
-                                    style: TextStyle(
-                                        fontSize: 20, color: Colors.white),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>SavedMedicine()));
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width / 2,
-                            height: MediaQuery.of(context).size.height / 5,
-                            // color: Colors.red,
-                            decoration: BoxDecoration(
-                                border: Border.all(width: 5),
-                                borderRadius: BorderRadius.circular(5),
-                                color: Colors.blueGrey),
-
-                            child: Column(
-                              children: [
-                                Icon(Icons.access_time_filled, size: 100),
-                                Text(
-                                  "Saved Medicine",
-                                  style: TextStyle(
-                                      fontSize: 20, color: Colors.white),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Visibility(
-                        visible: false,
-                        child: Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>NearByDoctor(userModel: widget.userModel,)));
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width / 2,
-                              height: MediaQuery.of(context).size.height / 5,
-                              // color: Colors.red,
-                              decoration: BoxDecoration(
-                                  border: Border.all(width: 5),
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.blueGrey),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
 
-                              child: Column(
-                                children: [
-                                  Icon(Icons.person, size: 100),
-                                  Text(
-                                    "Nearby Doctor's",
-                                    style: TextStyle(
-                                        fontSize: 20, color: Colors.white),
-                                  )
-                                ],
+                        child:Visibility(
+                          visible: true,
+                          child: Center(
+                            child: InkWell(
+                              onTap: () {
+                                FirebaseAuth.instance.signOut();
+                              },
+                              child: Container(
+                                width: MediaQuery.of(context).size.width / 2,
+                                height: MediaQuery.of(context).size.height / 5,
+                                // color: Colors.red,
+                                decoration: BoxDecoration(
+                                    border: Border.all(width: 5),
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Colors.blueGrey),
+
+                                child: Column(
+                                  children: [
+                                    Icon(Icons.logout_outlined, size: 100),
+                                    Text(
+                                      "Log Out",
+                                      style: TextStyle(
+                                          fontSize: 20, color: Colors.white),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      Visibility(
-                        visible: true,
-                        child: Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              FirebaseAuth.instance.signOut();
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width / 2,
-                              height: MediaQuery.of(context).size.height / 5,
-                              // color: Colors.red,
-                              decoration: BoxDecoration(
-                                  border: Border.all(width: 5),
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.blueGrey),
 
-                              child: Column(
-                                children: [
-                                  Icon(Icons.person, size: 100),
-                                  Text(
-                                    "Log Out",
-                                    style: TextStyle(
-                                        fontSize: 20, color: Colors.white),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                        width: 10,
-                      ),
-                    ],
                   ),
-                ),
 
-              ],
+                ],
+              ),
             ),
           );
   }

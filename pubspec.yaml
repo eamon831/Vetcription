@@ -34,6 +34,9 @@ dependencies:
   location: ^4.4.0
   firebase_core: ^2.4.0
   permission_handler: ^10.2.0
+  email_validator: ^2.1.17
+  maps_launcher: ^2.0.1
+  url_launcher: ^6.1.7
 
 
 

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +73,9 @@ class _SignUpForUserState extends State<SignUpForUser> {
                     if (value.isEmpty) {
                       return "This Field Can't Be Empty";
                     }
+                    if(value.length!=11){
+                      return "Mobile Number Should Contain Exactly 11 Digit";
+                    }
                     return null;
                   },
                   textInputAction: TextInputAction.next,
@@ -94,8 +98,12 @@ class _SignUpForUserState extends State<SignUpForUser> {
                 TextFormField(
                   controller: _emailController,
                   validator: (value) {
-                    if (value.isEmpty) {
-                      return "This Field Can't Be Empty";
+                    if (value.isEmptyOrNull) {
+                      return "This Field Is Required";
+                    }
+                    final bool isValid = EmailValidator.validate(value);
+                    if (isValid == false) {
+                      return "Please Enter A Valid Email";
                     }
                     return null;
                   },
@@ -168,6 +176,10 @@ class _SignUpForUserState extends State<SignUpForUser> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
+                    if(_passWordController.text!=_confirmPassWordController.text){
+                      toast("Password And Confirm Password Must Be Same");
+                      return;
+                    }
                     if(_formKey.currentState.validate()){
                       try {
                         UserModel user=UserModel();

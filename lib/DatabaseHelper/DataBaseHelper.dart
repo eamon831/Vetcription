@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:vetcription/Model/Disease.dart';
 import 'package:vetcription/Model/Medicine.dart';
 
 class DatabaseHelper{
@@ -55,7 +56,7 @@ class DatabaseHelper{
   //Insert Single Item
   Future<int> insert(Map<String, dynamic> row, String tbl) async {
     Database db = await instance.database;
-    return await db.insert(tbl, row);
+    return await db.insert(tbl, row,conflictAlgorithm: ConflictAlgorithm.ignore);
   }
 
   //Insert A Medicine List
@@ -75,6 +76,60 @@ class DatabaseHelper{
     Database db = await instance.database;
     var result = await db.query(tbl);
     return result.toList();
+  }
+  Future<List<Disease>> diseaseSearch(String filterCriteria) async {
+    Database db = await instance.database;
+    List<Disease> filteredCompanies = [];
+    var  res = await db.query(
+        "disease_data",
+        where: "name LIKE ? or description LIKE ?",
+        whereArgs: ['%$filterCriteria%','%$filterCriteria%']
+    );
+
+    if(res.length !=null){
+      //toast(res.length.toString());
+      for (var item in res){
+        filteredCompanies.add(Disease.fromJson(item));
+      }
+
+    }
+    return filteredCompanies;
+  }
+  Future<List<Medicine>> medicineSearch(String filterCriteria) async {
+    Database db = await instance.database;
+    List<Medicine> filteredMedicine = [];
+    var  res = await db.query(
+        "vet_data",
+        where: "trade_name LIKE ? or generic_name LIKE ?",
+        whereArgs: ['%$filterCriteria%','%$filterCriteria%']
+    );
+
+    if(res.length !=null){
+    //  toast(res.length.toString());
+      for (var item in res){
+        filteredMedicine.add(Medicine.fromJson(item));
+      }
+
+    }
+    return filteredMedicine;
+  }
+  Future<List<Medicine>> savedMedicineSearch(String filterCriteria) async {
+    Database db = await instance.database;
+    List<Medicine> filteredMedicine = [];
+    var  res = await db.query(
+        "saved_data",
+        where: "trade_name LIKE ? or generic_name LIKE ?",
+        whereArgs: ['%$filterCriteria%','%$filterCriteria%']
+    );
+
+    if(res.length !=null){
+    //  toast(res.length.toString());
+      for (var item in res){
+        filteredMedicine.add(Medicine.fromJson(item));
+      }
+
+    }
+    return filteredMedicine;
   }
 
 
