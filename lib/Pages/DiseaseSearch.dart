@@ -56,7 +56,7 @@ class _DiseaseSearchState extends State<DiseaseSearch> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
 
-        title: Text("Medicine's"),
+        title: Text("Disease"),
         bottomOpacity: 0.00,
         elevation: 0.00,
         actions: [
